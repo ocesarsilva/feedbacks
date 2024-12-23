@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState } from "react"
 
 export default function CTA() {
-  const [closeCTA, setCloseCTA] = useState(false);
+  const [closeCTA, setCloseCTA] = useState(false)
   return (
     <div
       className={`${
@@ -12,6 +12,7 @@ export default function CTA() {
           dark:border-t-4 dark:border-stone-700 dark:bg-black dark:text-white`}
     >
       <button
+        type="button"
         onClick={() => setCloseCTA(!closeCTA)}
         className={`${
           closeCTA ? "rotate-180" : "rotate-0"
@@ -76,5 +77,5 @@ export default function CTA() {
         </a>
       </div>
     </div>
-  );
+  )
 }

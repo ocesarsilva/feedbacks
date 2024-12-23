@@ -1,26 +1,26 @@
-import { getSession } from "@/lib/auth";
-import { notFound, redirect } from "next/navigation";
-import AnalyticsMockup from "@/components/analytics";
-import db from "@/lib/db";
+import AnalyticsMockup from "@/components/analytics"
+import { getSession } from "@/lib/auth"
+import db from "@/lib/db"
+import { notFound, redirect } from "next/navigation"
 
 export default async function SiteAnalytics({
   params,
 }: {
-  params: { id: string };
+  params: { id: string }
 }) {
-  const session = await getSession();
+  const session = await getSession()
   if (!session) {
-    redirect("/login");
+    redirect("/login")
   }
   const data = await db.query.sites.findFirst({
     where: (sites, { eq }) => eq(sites.id, decodeURIComponent(params.id)),
-  });
+  })
 
   if (!data || data.userId !== session.user.id) {
-    notFound();
+    notFound()
   }
 
-  const url = `${data.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`;
+  const url = `${data.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`
 
   return (
     <>
@@ -41,5 +41,5 @@ export default async function SiteAnalytics({
       </div>
       <AnalyticsMockup />
     </>
-  );
+  )
 }

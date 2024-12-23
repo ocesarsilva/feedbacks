@@ -1,18 +1,17 @@
-import { getSession } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-import LogoutButton from "./logout-button";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import Image from "next/image"
+import Link from "next/link"
+import { redirect } from "next/navigation"
+import LogoutButton from "./logout-button"
 
 export default async function Profile() {
   const session = await auth.api.getSession({
     headers: await headers(),
-  });
+  })
 
   if (!session?.user) {
-    redirect("/login");
+    redirect("/login")
   }
 
   return (
@@ -37,5 +36,5 @@ export default async function Profile() {
       </Link>
       <LogoutButton />
     </div>
-  );
+  )
 }

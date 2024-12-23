@@ -1,33 +1,38 @@
-import { useEffect, useRef, ReactNode, Dispatch, SetStateAction } from "react";
-import { AnimatePresence, motion, useAnimation } from "framer-motion";
+import { AnimatePresence, motion, useAnimation } from "framer-motion"
+import {
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
+  useEffect,
+  useRef,
+} from "react"
 
 export default function Leaflet({
   setShow,
   children,
 }: {
-  setShow: Dispatch<SetStateAction<boolean>>;
-  children: ReactNode;
+  setShow: Dispatch<SetStateAction<boolean>>
+  children: ReactNode
 }) {
-  const leafletRef = useRef<HTMLDivElement>(null);
-  const controls = useAnimation();
-  const transitionProps = { type: "spring", stiffness: 500, damping: 30 };
+  const leafletRef = useRef<HTMLDivElement>(null)
+  const controls = useAnimation()
+  const transitionProps = { type: "spring", stiffness: 500, damping: 30 }
   useEffect(() => {
     controls.start({
       y: 20,
       transition: transitionProps,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    })
+  }, [])
 
   async function handleDragEnd(_: any, info: any) {
-    const offset = info.offset.y;
-    const velocity = info.velocity.y;
-    const height = leafletRef.current?.getBoundingClientRect().height || 0;
+    const offset = info.offset.y
+    const velocity = info.velocity.y
+    const height = leafletRef.current?.getBoundingClientRect().height || 0
     if (offset > height / 2 || velocity > 800) {
-      await controls.start({ y: "100%", transition: transitionProps });
-      setShow(false);
+      await controls.start({ y: "100%", transition: transitionProps })
+      setShow(false)
     } else {
-      controls.start({ y: 0, transition: transitionProps });
+      controls.start({ y: 0, transition: transitionProps })
     }
   }
 
@@ -48,7 +53,9 @@ export default function Leaflet({
         dragConstraints={{ top: 0, bottom: 0 }}
       >
         <div
-          className={`rounded-t-4xl -mb-1 flex h-7 w-full items-center justify-center border-t border-gray-200`}
+          className={
+            "rounded-t-4xl -mb-1 flex h-7 w-full items-center justify-center border-t border-gray-200"
+          }
         >
           <div className="-mr-1 h-1 w-6 rounded-full bg-gray-300 transition-all group-active:rotate-12" />
           <div className="h-1 w-6 rounded-full bg-gray-300 transition-all group-active:-rotate-12" />
@@ -64,5 +71,5 @@ export default function Leaflet({
         onClick={() => setShow(false)}
       />
     </AnimatePresence>
-  );
+  )
 }

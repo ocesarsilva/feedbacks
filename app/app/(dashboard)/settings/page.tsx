@@ -1,13 +1,12 @@
-import { ReactNode } from "react";
-import Form from "@/components/form";
-import { getSession } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { editUser } from "@/lib/actions";
+import Form from "@/components/form"
+import { editUser } from "@/lib/actions"
+import { getSession } from "@/lib/auth"
+import { redirect } from "next/navigation"
 
 export default async function SettingsPage() {
-  const session = await getSession();
+  const session = await getSession()
   if (!session) {
-    redirect("/login");
+    redirect("/login")
   }
   return (
     <div className="flex max-w-screen-xl flex-col space-y-12 p-8">
@@ -42,5 +41,5 @@ export default async function SettingsPage() {
         />
       </div>
     </div>
-  );
+  )
 }

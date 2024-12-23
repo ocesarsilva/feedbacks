@@ -1,15 +1,15 @@
-import Form from "@/components/form";
-import { updateSite } from "@/lib/actions";
-import db from "@/lib/db";
+import Form from "@/components/form"
+import { updateSite } from "@/lib/actions"
+import db from "@/lib/db"
 
 export default async function SiteSettingsAppearance({
   params,
 }: {
-  params: { id: string };
+  params: { id: string }
 }) {
   const data = await db.query.sites.findFirst({
     where: (sites, { eq }) => eq(sites.id, decodeURIComponent(params.id)),
-  });
+  })
 
   return (
     <div className="flex flex-col space-y-6">
@@ -60,5 +60,5 @@ export default async function SiteSettingsAppearance({
         handleSubmit={updateSite}
       />
     </div>
-  );
+  )
 }

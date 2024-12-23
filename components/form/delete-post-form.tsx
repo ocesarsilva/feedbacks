@@ -1,28 +1,28 @@
-"use client";
+"use client"
 
-import LoadingDots from "@/components/icons/loading-dots";
-import { cn } from "@/lib/utils";
-import { useParams, useRouter } from "next/navigation";
-import { useFormStatus } from "react-dom";
-import { toast } from "sonner";
-import { deletePost } from "@/lib/actions";
-import va from "@vercel/analytics";
+import LoadingDots from "@/components/icons/loading-dots"
+import { deletePost } from "@/lib/actions"
+import { cn } from "@/lib/utils"
+import va from "@vercel/analytics"
+import { useParams, useRouter } from "next/navigation"
+import { useFormStatus } from "react-dom"
+import { toast } from "sonner"
 
 export default function DeletePostForm({ postName }: { postName: string }) {
-  const { id } = useParams() as { id: string };
-  const router = useRouter();
+  const { id } = useParams() as { id: string }
+  const router = useRouter()
   return (
     <form
       action={async (data: FormData) =>
         window.confirm("Are you sure you want to delete your post?") &&
         deletePost(data, id, "delete").then((res) => {
           if (res.error) {
-            toast.error(res.error);
+            toast.error(res.error)
           } else {
-            va.track("Deleted Post");
-            router.refresh();
-            router.push(`/site/${res.siteId}`);
-            toast.success(`Successfully deleted post!`);
+            va.track("Deleted Post")
+            router.refresh()
+            router.push(`/site/${res.siteId}`)
+            toast.success("Successfully deleted post!")
           }
         })
       }
@@ -54,22 +54,23 @@ export default function DeletePostForm({ postName }: { postName: string }) {
         </div>
       </div>
     </form>
-  );
+  )
 }
 
 function FormButton() {
-  const { pending } = useFormStatus();
+  const { pending } = useFormStatus()
   return (
     <button
+      type="submit"
       className={cn(
         "flex h-8 w-32 items-center justify-center space-x-2 rounded-md border text-sm transition-all focus:outline-none sm:h-10",
         pending
           ? "cursor-not-allowed border-stone-200 bg-stone-100 text-stone-400 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300"
-          : "border-red-600 bg-red-600 text-white hover:bg-white hover:text-red-600 dark:hover:bg-transparent",
+          : "border-red-600 bg-red-600 text-white hover:bg-white hover:text-red-600 dark:hover:bg-transparent"
       )}
       disabled={pending}
     >
       {pending ? <LoadingDots color="#808080" /> : <p>Confirm Delete</p>}
     </button>
-  );
+  )
 }

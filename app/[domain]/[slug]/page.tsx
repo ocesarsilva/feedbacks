@@ -1,29 +1,29 @@
-import { notFound } from "next/navigation";
-import { getPostData, getSiteData } from "@/lib/fetchers";
-import BlogCard from "@/components/blog-card";
-import BlurImage from "@/components/blur-image";
-import MDX from "@/components/mdx";
-import { placeholderBlurhash, toDateString } from "@/lib/utils";
-import db from "@/lib/db";
-import { posts, sites } from "@/lib/schema";
-import { eq } from "drizzle-orm";
+import BlogCard from "@/components/blog-card"
+import BlurImage from "@/components/blur-image"
+import MDX from "@/components/mdx"
+import db from "@/lib/db"
+import { getPostData, getSiteData } from "@/lib/fetchers"
+import { posts, sites } from "@/lib/schema"
+import { placeholderBlurhash, toDateString } from "@/lib/utils"
+import { eq } from "drizzle-orm"
+import { notFound } from "next/navigation"
 
 export async function generateMetadata({
   params,
 }: {
-  params: { domain: string; slug: string };
+  params: { domain: string; slug: string }
 }) {
-  const domain = decodeURIComponent(params.domain);
-  const slug = decodeURIComponent(params.slug);
+  const domain = decodeURIComponent(params.domain)
+  const slug = decodeURIComponent(params.slug)
 
   const [data, siteData] = await Promise.all([
     getPostData(domain, slug),
     getSiteData(domain),
-  ]);
+  ])
   if (!data || !siteData) {
-    return null;
+    return null
   }
-  const { title, description } = data;
+  const { title, description } = data
 
   return {
     title,
@@ -45,7 +45,7 @@ export async function generateMetadata({
     //       canonical: `https://${siteData.customDomain}/${params.slug}`,
     //     },
     //   }),
-  };
+  }
 }
 
 export async function generateStaticParams() {
@@ -59,7 +59,7 @@ export async function generateStaticParams() {
     })
     .from(posts)
     .leftJoin(sites, eq(posts.siteId, sites.id))
-    .where(eq(sites.subdomain, "demo")); // feel free to remove this filter if you want to generate paths for all posts
+    .where(eq(sites.subdomain, "demo")) // feel free to remove this filter if you want to generate paths for all posts
 
   const allPaths = allPosts
     .flatMap(({ site, slug }) => [
@@ -72,22 +72,22 @@ export async function generateStaticParams() {
         slug,
       },
     ])
-    .filter(Boolean);
+    .filter(Boolean)
 
-  return allPaths;
+  return allPaths
 }
 
 export default async function SitePostPage({
   params,
 }: {
-  params: { domain: string; slug: string };
+  params: { domain: string; slug: string }
 }) {
-  const domain = decodeURIComponent(params.domain);
-  const slug = decodeURIComponent(params.slug);
-  const data = await getPostData(domain, slug);
+  const domain = decodeURIComponent(params.domain)
+  const slug = decodeURIComponent(params.slug)
+  const data = await getPostData(domain, slug)
 
   if (!data) {
-    notFound();
+    notFound()
   }
 
   return (
@@ -172,5 +172,5 @@ export default async function SitePostPage({
         </div>
       )}
     </>
-  );
+  )
 }

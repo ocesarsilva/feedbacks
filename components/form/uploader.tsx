@@ -1,44 +1,44 @@
-"use client";
+"use client"
 
-import { cn } from "@/lib/utils";
-import { useRef, useState } from "react";
-import { toast } from "sonner";
+import { cn } from "@/lib/utils"
+import { useRef, useState } from "react"
+import { toast } from "sonner"
 
 export default function Uploader({
   defaultValue,
   name,
 }: {
-  defaultValue: string | null;
-  name: "image" | "logo";
+  defaultValue: string | null
+  name: "image" | "logo"
 }) {
-  const aspectRatio = name === "image" ? "aspect-video" : "aspect-square";
+  const aspectRatio = name === "image" ? "aspect-video" : "aspect-square"
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null)
   const [data, setData] = useState({
     [name]: defaultValue,
-  });
+  })
 
-  const [dragActive, setDragActive] = useState(false);
+  const [dragActive, setDragActive] = useState(false)
 
   const handleUpload = (file: File | null) => {
     if (file) {
       if (file.size / 1024 / 1024 > 50) {
-        toast.error("File size too big (max 50MB)");
+        toast.error("File size too big (max 50MB)")
       } else if (
         !file.type.includes("png") &&
         !file.type.includes("jpg") &&
         !file.type.includes("jpeg")
       ) {
-        toast.error("Invalid file type (must be .png, .jpg, or .jpeg)");
+        toast.error("Invalid file type (must be .png, .jpg, or .jpeg)")
       } else {
-        const reader = new FileReader();
+        const reader = new FileReader()
         reader.onload = (e) => {
-          setData((prev) => ({ ...prev, [name]: e.target?.result as string }));
-        };
-        reader.readAsDataURL(file);
+          setData((prev) => ({ ...prev, [name]: e.target?.result as string }))
+        }
+        reader.readAsDataURL(file)
       }
     }
-  };
+  }
 
   return (
     <div>
@@ -50,34 +50,34 @@ export default function Uploader({
           {
             "max-w-screen-md": aspectRatio === "aspect-video",
             "max-w-xs": aspectRatio === "aspect-square",
-          },
+          }
         )}
       >
         <div
           className="absolute z-[5] h-full w-full rounded-md"
           onDragOver={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setDragActive(true);
+            e.preventDefault()
+            e.stopPropagation()
+            setDragActive(true)
           }}
           onDragEnter={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setDragActive(true);
+            e.preventDefault()
+            e.stopPropagation()
+            setDragActive(true)
           }}
           onDragLeave={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setDragActive(false);
+            e.preventDefault()
+            e.stopPropagation()
+            setDragActive(false)
           }}
           onDrop={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setDragActive(false);
+            e.preventDefault()
+            e.stopPropagation()
+            setDragActive(false)
 
-            const file = e.dataTransfer.files && e.dataTransfer.files[0];
-            inputRef.current!.files = e.dataTransfer.files; // set input file to dropped file
-            handleUpload(file);
+            const file = e.dataTransfer.files?.[0]
+            inputRef.current!.files = e.dataTransfer.files // set input file to dropped file
+            handleUpload(file)
           }}
         />
         <div
@@ -103,9 +103,9 @@ export default function Uploader({
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
-            <path d="M12 12v9"></path>
-            <path d="m16 16-4-4-4 4"></path>
+            <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
+            <path d="M12 12v9" />
+            <path d="m16 16-4-4-4 4" />
           </svg>
           <p className="mt-2 text-center text-sm text-gray-500">
             Drag and drop or click to upload.
@@ -116,7 +116,6 @@ export default function Uploader({
           <span className="sr-only">Photo upload</span>
         </div>
         {data[name] && (
-          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={data[name] as string}
             alt="Preview"
@@ -133,11 +132,11 @@ export default function Uploader({
           accept="image/*"
           className="sr-only"
           onChange={(e) => {
-            const file = e.currentTarget.files && e.currentTarget.files[0];
-            handleUpload(file);
+            const file = e.currentTarget.files?.[0]
+            handleUpload(file)
           }}
         />
       </div>
     </div>
-  );
+  )
 }

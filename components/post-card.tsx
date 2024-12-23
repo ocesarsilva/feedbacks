@@ -1,15 +1,14 @@
-import BlurImage from "@/components/blur-image";
-import type { SelectPost, SelectSite } from "@/lib/schema";
-import { placeholderBlurhash, random } from "@/lib/utils";
-import { BarChart, ExternalLink } from "lucide-react";
-import Link from "next/link";
+import BlurImage from "@/components/blur-image"
+import type { SelectPost, SelectSite } from "@/lib/schema"
+import { placeholderBlurhash } from "@/lib/utils"
+import Link from "next/link"
 
 export default function PostCard({
   data,
 }: {
-  data: SelectPost & { site: SelectSite | null };
+  data: SelectPost & { site: SelectSite | null }
 }) {
-  const url = `${data.site?.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${data.slug}`;
+  const url = `${data.site?.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${data.slug}`
 
   return (
     <div className="relative rounded-lg border border-stone-200 pb-10 shadow-md transition-all hover:shadow-xl dark:border-stone-700 dark:hover:border-white">
@@ -57,5 +56,5 @@ export default function PostCard({
         </a>
       </div>
     </div>
-  );
+  )
 }

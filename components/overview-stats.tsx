@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import { random } from "@/lib/utils";
-import { Card, Metric, Text, AreaChart, BadgeDelta, Flex } from "@tremor/react";
-import { useMemo } from "react";
+import { random } from "@/lib/utils"
+import { AreaChart, BadgeDelta, Card, Flex, Metric, Text } from "@tremor/react"
+import { useMemo } from "react"
 
 export default function OverviewStats() {
   const data = useMemo(() => {
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
     return [
       ...months.map((month) => ({
         Month: `${month} 23`,
@@ -16,8 +16,8 @@ export default function OverviewStats() {
         Month: "Jul 23",
         "Total Visitors": 170418,
       },
-    ];
-  }, []);
+    ]
+  }, [])
 
   return (
     <div className="grid gap-6 sm:grid-cols-2">
@@ -53,5 +53,5 @@ export default function OverviewStats() {
         />
       </Card>
     </div>
-  );
+  )
 }

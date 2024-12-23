@@ -1,10 +1,12 @@
-"use client";
+"use client"
 
-import Link from "next/link";
+import { getSiteFromPostId } from "@/lib/actions"
 import {
   ArrowLeft,
   BarChart3,
   Edit3,
+  FileCode,
+  Github,
   Globe,
   Layout,
   LayoutDashboard,
@@ -12,17 +14,15 @@ import {
   Menu,
   Newspaper,
   Settings,
-  FileCode,
-  Github,
-} from "lucide-react";
+} from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 import {
   useParams,
   usePathname,
   useSelectedLayoutSegments,
-} from "next/navigation";
-import { ReactNode, useEffect, useMemo, useState } from "react";
-import { getSiteFromPostId } from "@/lib/actions";
-import Image from "next/image";
+} from "next/navigation"
+import React, { type ReactNode, useEffect, useMemo, useState } from "react"
 
 const externalLinks = [
   {
@@ -60,21 +60,21 @@ const externalLinks = [
       </svg>
     ),
   },
-];
+]
 
 export default function Nav({ children }: { children: ReactNode }) {
-  const segments = useSelectedLayoutSegments();
-  const { id } = useParams() as { id?: string };
+  const segments = useSelectedLayoutSegments()
+  const { id } = useParams() as { id?: string }
 
-  const [siteId, setSiteId] = useState<string | null>();
+  const [siteId, setSiteId] = useState<string | null>()
 
   useEffect(() => {
     if (segments[0] === "post" && id) {
       getSiteFromPostId(id).then((id) => {
-        setSiteId(id);
-      });
+        setSiteId(id)
+      })
     }
-  }, [segments, id]);
+  }, [segments, id])
 
   const tabs = useMemo(() => {
     if (segments[0] === "site" && id) {
@@ -102,8 +102,9 @@ export default function Nav({ children }: { children: ReactNode }) {
           isActive: segments.includes("settings"),
           icon: <Settings width={18} />,
         },
-      ];
-    } else if (segments[0] === "post" && id) {
+      ]
+    }
+    if (segments[0] === "post" && id) {
       return [
         {
           name: "Back to All Posts",
@@ -122,7 +123,7 @@ export default function Nav({ children }: { children: ReactNode }) {
           isActive: segments.includes("settings"),
           icon: <Settings width={18} />,
         },
-      ];
+      ]
     }
     return [
       {
@@ -143,21 +144,21 @@ export default function Nav({ children }: { children: ReactNode }) {
         isActive: segments[0] === "settings",
         icon: <Settings width={18} />,
       },
-    ];
-  }, [segments, id, siteId]);
+    ]
+  }, [segments, id, siteId])
 
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false)
 
-  const pathname = usePathname();
+  const pathname = usePathname()
 
-  useEffect(() => {
-    // hide sidebar on path change
-    setShowSidebar(false);
-  }, [pathname]);
+  React.useEffect(() => {
+    setShowSidebar(false)
+  }, [pathname])
 
   return (
     <>
       <button
+        type="button"
         className={`fixed z-20 ${
           // left align for Editor, right align for other pages
           segments[0] === "post" && segments.length === 2 && !showSidebar
@@ -246,5 +247,5 @@ export default function Nav({ children }: { children: ReactNode }) {
         </div>
       </div>
     </>
-  );
+  )
 }

@@ -1,57 +1,57 @@
-"use client";
+"use client"
 
-import { useState, useCallback, useMemo, ChangeEvent } from "react";
-import { toast } from "sonner";
-import LoadingDots from "@/components/icons/loading-dots";
+import LoadingDots from "@/components/icons/loading-dots"
+import { type ChangeEvent, useCallback, useMemo, useState } from "react"
+import { toast } from "sonner"
 
 export default function Uploader() {
   const [data, setData] = useState<{
-    image: string | null;
+    image: string | null
   }>({
     image: null,
-  });
-  const [file, setFile] = useState<File | null>(null);
+  })
+  const [file, setFile] = useState<File | null>(null)
 
-  const [dragActive, setDragActive] = useState(false);
+  const [dragActive, setDragActive] = useState(false)
 
   const onChangePicture = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      const file = event.currentTarget.files && event.currentTarget.files[0];
+      const file = event.currentTarget.files?.[0]
       if (file) {
         if (file.size / 1024 / 1024 > 50) {
-          toast.error("File size too big (max 50MB)");
+          toast.error("File size too big (max 50MB)")
         } else {
-          setFile(file);
-          const reader = new FileReader();
+          setFile(file)
+          const reader = new FileReader()
           reader.onload = (e) => {
-            setData((prev) => ({ ...prev, image: e.target?.result as string }));
-          };
-          reader.readAsDataURL(file);
+            setData((prev) => ({ ...prev, image: e.target?.result as string }))
+          }
+          reader.readAsDataURL(file)
         }
       }
     },
-    [setData],
-  );
+    [setData]
+  )
 
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving] = useState(false)
 
   const saveDisabled = useMemo(() => {
-    return !data.image || saving;
-  }, [data.image, saving]);
+    return !data.image || saving
+  }, [data.image, saving])
 
   return (
     <form
       className="grid gap-6"
       onSubmit={async (e) => {
-        e.preventDefault();
-        setSaving(true);
+        e.preventDefault()
+        setSaving(true)
         fetch("/api/upload", {
           method: "POST",
           headers: { "content-type": file?.type || "application/octet-stream" },
           body: file,
         }).then(async (res) => {
           if (res.status === 200) {
-            const { url } = await res.json();
+            const { url } = await res.json()
             toast(
               <div className="relative">
                 <div className="p-2">
@@ -68,14 +68,14 @@ export default function Uploader() {
                     </a>
                   </p>
                 </div>
-              </div>,
-            );
+              </div>
+            )
           } else {
-            const error = await res.text();
-            toast.error(error);
+            const error = await res.text()
+            toast.error(error)
           }
-          setSaving(false);
-        });
+          setSaving(false)
+        })
       }}
     >
       <div>
@@ -92,39 +92,39 @@ export default function Uploader() {
           <div
             className="absolute z-[5] h-full w-full rounded-md"
             onDragOver={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setDragActive(true);
+              e.preventDefault()
+              e.stopPropagation()
+              setDragActive(true)
             }}
             onDragEnter={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setDragActive(true);
+              e.preventDefault()
+              e.stopPropagation()
+              setDragActive(true)
             }}
             onDragLeave={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setDragActive(false);
+              e.preventDefault()
+              e.stopPropagation()
+              setDragActive(false)
             }}
             onDrop={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setDragActive(false);
+              e.preventDefault()
+              e.stopPropagation()
+              setDragActive(false)
 
-              const file = e.dataTransfer.files && e.dataTransfer.files[0];
+              const file = e.dataTransfer.files?.[0]
               if (file) {
                 if (file.size / 1024 / 1024 > 50) {
-                  toast.error("File size too big (max 50MB)");
+                  toast.error("File size too big (max 50MB)")
                 } else {
-                  setFile(file);
-                  const reader = new FileReader();
+                  setFile(file)
+                  const reader = new FileReader()
                   reader.onload = (e) => {
                     setData((prev) => ({
                       ...prev,
                       image: e.target?.result as string,
-                    }));
-                  };
-                  reader.readAsDataURL(file);
+                    }))
+                  }
+                  reader.readAsDataURL(file)
                 }
               }
             }}
@@ -152,9 +152,9 @@ export default function Uploader() {
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
-              <path d="M12 12v9"></path>
-              <path d="m16 16-4-4-4 4"></path>
+              <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
+              <path d="M12 12v9" />
+              <path d="m16 16-4-4-4 4" />
             </svg>
             <p className="mt-2 text-center text-sm text-gray-500">
               Drag and drop or click to upload.
@@ -165,7 +165,6 @@ export default function Uploader() {
             <span className="sr-only">Photo upload</span>
           </div>
           {data.image && (
-            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={data.image}
               alt="Preview"
@@ -186,6 +185,7 @@ export default function Uploader() {
       </div>
 
       <button
+        type="submit"
         disabled={saveDisabled}
         className={`${
           saveDisabled
@@ -200,5 +200,5 @@ export default function Uploader() {
         )}
       </button>
     </form>
-  );
+  )
 }

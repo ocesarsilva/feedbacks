@@ -1,6 +1,6 @@
-import { ReactNode, Suspense } from "react";
-import Profile from "@/components/profile";
-import Nav from "@/components/nav";
+import Nav from "@/components/nav"
+import Profile from "@/components/profile"
+import { type ReactNode, Suspense } from "react"
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
@@ -12,5 +12,5 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       </Nav>
       <div className="min-h-screen sm:pl-60 dark:bg-black">{children}</div>
     </div>
-  );
+  )
 }

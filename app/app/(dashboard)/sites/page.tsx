@@ -1,8 +1,8 @@
-import { Suspense } from "react";
-import Sites from "@/components/sites";
-import PlaceholderCard from "@/components/placeholder-card";
-import CreateSiteButton from "@/components/create-site-button";
-import CreateSiteModal from "@/components/modal/create-site";
+import CreateSiteButton from "@/components/create-site-button"
+import CreateSiteModal from "@/components/modal/create-site"
+import PlaceholderCard from "@/components/placeholder-card"
+import Sites from "@/components/sites"
+import { Suspense } from "react"
 
 export default function AllSites({ params }: { params: { id: string } }) {
   return (
@@ -20,6 +20,7 @@ export default function AllSites({ params }: { params: { id: string } }) {
           fallback={
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {Array.from({ length: 8 }).map((_, i) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                 <PlaceholderCard key={i} />
               ))}
             </div>
@@ -30,5 +31,5 @@ export default function AllSites({ params }: { params: { id: string } }) {
         </Suspense>
       </div>
     </div>
-  );
+  )
 }

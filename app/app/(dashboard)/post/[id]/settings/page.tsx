@@ -1,27 +1,27 @@
-import { notFound, redirect } from "next/navigation";
-import Form from "@/components/form";
-import { updatePostMetadata } from "@/lib/actions";
-import DeletePostForm from "@/components/form/delete-post-form";
-import db from "@/lib/db";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+import Form from "@/components/form"
+import DeletePostForm from "@/components/form/delete-post-form"
+import { updatePostMetadata } from "@/lib/actions"
+import { auth } from "@/lib/auth"
+import db from "@/lib/db"
+import { headers } from "next/headers"
+import { notFound, redirect } from "next/navigation"
 
 export default async function PostSettings({
   params,
 }: {
-  params: { id: string };
+  params: { id: string }
 }) {
   const session = await auth.api.getSession({
     headers: await headers(),
-  });
+  })
   if (!session) {
-    redirect("/login");
+    redirect("/login")
   }
   const data = await db.query.posts.findFirst({
     where: (posts, { eq }) => eq(posts.id, decodeURIComponent(params.id)),
-  });
+  })
   if (!data || data.userId !== session.user.id) {
-    notFound();
+    notFound()
   }
   return (
     <div className="flex max-w-screen-xl flex-col space-y-12 p-6">
@@ -57,5 +57,5 @@ export default async function PostSettings({
         <DeletePostForm postName={data?.title!} />
       </div>
     </div>
-  );
+  )
 }

@@ -1,15 +1,15 @@
-import "@/styles/globals.css";
-import { cal, inter } from "@/styles/fonts";
-import { Analytics } from "@vercel/analytics/react";
-import { Providers } from "./providers";
-import { Metadata } from "next";
-import { cn } from "@/lib/utils";
+import "@/styles/globals.css"
+import { cn } from "@/lib/utils"
+import { cal, inter } from "@/styles/fonts"
+import { Analytics } from "@vercel/analytics/react"
+import type { Metadata } from "next"
+import { Providers } from "./providers"
 
 const title =
-  "Platforms Starter Kit – The all-in-one starter kit for building multi-tenant applications.";
+  "Platforms Starter Kit – The all-in-one starter kit for building multi-tenant applications."
 const description =
-  "The Platforms Starter Kit is a full-stack Next.js app with multi-tenancy and custom domain support. Built with Next.js App Router, Vercel Postgres and the Vercel Domains API.";
-const image = "https://vercel.pub/thumbnail.png";
+  "The Platforms Starter Kit is a full-stack Next.js app with multi-tenancy and custom domain support. Built with Next.js App Router, Vercel Postgres and the Vercel Domains API."
+const image = "https://vercel.pub/thumbnail.png"
 
 export const metadata: Metadata = {
   title,
@@ -28,12 +28,12 @@ export const metadata: Metadata = {
     creator: "@vercel",
   },
   metadataBase: new URL("https://vercel.pub"),
-};
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -44,5 +44,5 @@ export default function RootLayout({
         </Providers>
       </body>
     </html>
-  );
+  )
 }

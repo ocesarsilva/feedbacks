@@ -1,9 +1,9 @@
-import { betterAuth } from "better-auth";
+import { betterAuth } from "better-auth"
 
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import db from "./db";
-import { nextCookies } from "better-auth/next-js";
-import { headers } from "next/headers";
+import { drizzleAdapter } from "better-auth/adapters/drizzle"
+import { nextCookies } from "better-auth/next-js"
+import { headers } from "next/headers"
+import db from "./db"
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -18,54 +18,54 @@ export const auth = betterAuth({
   },
   plugins: [nextCookies()],
   trustedOrigins: ["http://app.localhost:3000/login"],
-});
+})
 
 export async function getSession() {
   const session = await auth.api.getSession({
     headers: headers(),
-  });
+  })
 
-  return session;
+  return session
 }
 
 export function withSiteAuth(action: any) {
   return async (
     formData: FormData | null,
     siteId: string,
-    key: string | null,
+    key: string | null
   ) => {
-    const session = await getSession();
+    const session = await getSession()
     if (!session) {
       return {
         error: "Not authenticated",
-      };
+      }
     }
 
     const site = await db.query.sites.findFirst({
       where: (sites, { eq }) => eq(sites.id, siteId),
-    });
+    })
 
     if (!site || site.userId !== session.user.id) {
       return {
         error: "Not authorized",
-      };
+      }
     }
 
-    return action(formData, site, key);
-  };
+    return action(formData, site, key)
+  }
 }
 
 export function withPostAuth(action: any) {
   return async (
     formData: FormData | null,
     postId: string,
-    key: string | null,
+    key: string | null
   ) => {
-    const session = await getSession();
+    const session = await getSession()
     if (!session?.user.id) {
       return {
         error: "Not authenticated",
-      };
+      }
     }
 
     const post = await db.query.posts.findFirst({
@@ -73,14 +73,14 @@ export function withPostAuth(action: any) {
       with: {
         site: true,
       },
-    });
+    })
 
     if (!post || post.userId !== session.user.id) {
       return {
         error: "Post not found",
-      };
+      }
     }
 
-    return action(formData, post, key);
-  };
+    return action(formData, post, key)
+  }
 }

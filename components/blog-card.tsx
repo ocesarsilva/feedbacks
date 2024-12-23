@@ -1,13 +1,13 @@
-import Link from "next/link";
-import BlurImage from "./blur-image";
-import { placeholderBlurhash, toDateString } from "@/lib/utils";
-import type { SelectPost } from "@/lib/schema";
+import type { SelectPost } from "@/lib/schema"
+import { placeholderBlurhash, toDateString } from "@/lib/utils"
+import Link from "next/link"
+import BlurImage from "./blur-image"
 
 interface BlogCardProps {
   data: Pick<
     SelectPost,
     "slug" | "image" | "imageBlurhash" | "title" | "description" | "createdAt"
-  >;
+  >
 }
 
 export default function BlogCard({ data }: BlogCardProps) {
@@ -36,5 +36,5 @@ export default function BlogCard({ data }: BlogCardProps) {
         </div>
       </div>
     </Link>
-  );
+  )
 }

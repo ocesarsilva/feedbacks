@@ -5,7 +5,7 @@
     posterity.
 */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"
 // import db from "@/lib/db/db";
 
 export async function GET() {
@@ -37,5 +37,5 @@ export async function GET() {
   //     db.insert(examples).values(parsedExamples)
   //   ]);
 
-  return NextResponse.json({ response: "ok" });
+  return NextResponse.json({ response: "ok" })
 }

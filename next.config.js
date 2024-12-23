@@ -20,4 +20,4 @@ module.exports = {
       { hostname: "illustrations.popsy.co" },
     ],
   },
-};
+}

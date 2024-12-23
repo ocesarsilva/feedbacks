@@ -1,29 +1,29 @@
-import { ReactNode } from "react";
-import { getSession } from "@/lib/auth";
-import { notFound, redirect } from "next/navigation";
-import SiteSettingsNav from "./nav";
-import db from "@/lib/db";
+import { getSession } from "@/lib/auth"
+import db from "@/lib/db"
+import { notFound, redirect } from "next/navigation"
+import type { ReactNode } from "react"
+import SiteSettingsNav from "./nav"
 
 export default async function SiteAnalyticsLayout({
   params,
   children,
 }: {
-  params: { id: string };
-  children: ReactNode;
+  params: { id: string }
+  children: ReactNode
 }) {
-  const session = await getSession();
+  const session = await getSession()
   if (!session) {
-    redirect("/login");
+    redirect("/login")
   }
   const data = await db.query.sites.findFirst({
     where: (sites, { eq }) => eq(sites.id, decodeURIComponent(params.id)),
-  });
+  })
 
   if (!data || data.userId !== session.user.id) {
-    notFound();
+    notFound()
   }
 
-  const url = `${data.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`;
+  const url = `${data.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`
 
   return (
     <>
@@ -47,5 +47,5 @@ export default async function SiteAnalyticsLayout({
       <SiteSettingsNav />
       {children}
     </>
-  );
+  )
 }

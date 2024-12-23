@@ -1,20 +1,20 @@
-import { getSession } from "@/lib/auth";
-import db from "@/lib/db";
-import Image from "next/image";
-import { redirect } from "next/navigation";
-import SiteCard from "./site-card";
+import { getSession } from "@/lib/auth"
+import db from "@/lib/db"
+import Image from "next/image"
+import { redirect } from "next/navigation"
+import SiteCard from "./site-card"
 
 export default async function Sites({ limit }: { limit?: number }) {
-  const session = await getSession();
+  const session = await getSession()
   if (!session) {
-    redirect("/login");
+    redirect("/login")
   }
 
   const sites = await db.query.sites.findMany({
     where: (sites, { eq }) => eq(sites.userId, session.user.id),
     orderBy: (sites, { asc }) => asc(sites.createdAt),
     ...(limit ? { limit } : {}),
-  });
+  })
 
   return sites.length > 0 ? (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -35,5 +35,5 @@ export default async function Sites({ limit }: { limit?: number }) {
         You do not have any sites yet. Create one to get started.
       </p>
     </div>
-  );
+  )
 }

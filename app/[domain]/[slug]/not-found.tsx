@@ -1,13 +1,13 @@
-import { getSiteData } from "@/lib/fetchers";
-import { headers } from "next/headers";
-import Image from "next/image";
+import { getSiteData } from "@/lib/fetchers"
+import { headers } from "next/headers"
+import Image from "next/image"
 
 export default async function NotFound() {
-  const headersList = headers();
+  const headersList = headers()
   const domain = headersList
     .get("host")
-    ?.replace(".localhost:3000", `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
-  const data = await getSiteData(domain as string);
+    ?.replace(".localhost:3000", `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
+  const data = await getSiteData(domain as string)
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -24,5 +24,5 @@ export default async function NotFound() {
           : "Blimey! You've found a page that doesn't exist."}
       </p>
     </div>
-  );
+  )
 }

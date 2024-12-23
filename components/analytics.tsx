@@ -1,16 +1,16 @@
-"use client";
+"use client"
 
 import {
-  Card,
-  Text,
-  Title,
+  AreaChart,
   BarList,
+  Bold,
+  Card,
   Flex,
   Grid,
-  Bold,
-  AreaChart,
-} from "@tremor/react";
-import Image from "next/image";
+  Text,
+  Title,
+} from "@tremor/react"
+import Image from "next/image"
 
 const chartdata = [
   {
@@ -37,7 +37,7 @@ const chartdata = [
     date: "Jun 23",
     Visitors: 3129,
   },
-];
+]
 
 const pages = [
   { name: "/platforms-starter-kit", value: 1230 },
@@ -45,7 +45,7 @@ const pages = [
   { name: "/nextjs-conf", value: 471 },
   { name: "/150m-series-d", value: 280 },
   { name: "/about", value: 78 },
-];
+]
 
 const referrers = [
   { name: "t.co", value: 453 },
@@ -56,7 +56,7 @@ const referrers = [
     name: "news.ycombinator.com",
     value: 71,
   },
-];
+]
 
 const countries = [
   { name: "United States of America", value: 789, code: "US" },
@@ -64,7 +64,7 @@ const countries = [
   { name: "Germany", value: 564, code: "DE" },
   { name: "United Kingdom", value: 234, code: "GB" },
   { name: "Spain", value: 191, code: "ES" },
-];
+]
 
 const categories = [
   {
@@ -82,7 +82,7 @@ const categories = [
     subtitle: "Country",
     data: countries,
   },
-];
+]
 
 export default function AnalyticsMockup() {
   return (
@@ -127,8 +127,9 @@ export default function AnalyticsMockup() {
                         width={20}
                         height={20}
                       />
-                    );
-                  } else if (title === "Countries") {
+                    )
+                  }
+                  if (title === "Countries") {
                     return (
                       <Image
                         src={`https://flag.vercel.app/m/${code}.svg`}
@@ -137,10 +138,9 @@ export default function AnalyticsMockup() {
                         width={24}
                         height={16}
                       />
-                    );
-                  } else {
-                    return null;
+                    )
                   }
+                  return null
                 },
               }))}
               className="mt-2"
@@ -149,5 +149,5 @@ export default function AnalyticsMockup() {
         ))}
       </Grid>
     </div>
-  );
+  )
 }

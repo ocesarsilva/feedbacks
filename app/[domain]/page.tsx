@@ -1,11 +1,11 @@
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import BlurImage from "@/components/blur-image";
-import { placeholderBlurhash, toDateString } from "@/lib/utils";
-import BlogCard from "@/components/blog-card";
-import { getPostsForSite, getSiteData } from "@/lib/fetchers";
-import Image from "next/image";
-import db from "@/lib/db";
+import BlogCard from "@/components/blog-card"
+import BlurImage from "@/components/blur-image"
+import db from "@/lib/db"
+import { getPostsForSite, getSiteData } from "@/lib/fetchers"
+import { placeholderBlurhash, toDateString } from "@/lib/utils"
+import Image from "next/image"
+import Link from "next/link"
+import { notFound } from "next/navigation"
 
 export async function generateStaticParams() {
   const allSites = await db.query.sites.findMany({
@@ -15,7 +15,7 @@ export async function generateStaticParams() {
       subdomain: true,
       customDomain: true,
     },
-  });
+  })
 
   const allPaths = allSites
     .flatMap(({ subdomain, customDomain }) => [
@@ -26,24 +26,24 @@ export async function generateStaticParams() {
         domain: customDomain,
       },
     ])
-    .filter(Boolean);
+    .filter(Boolean)
 
-  return allPaths;
+  return allPaths
 }
 
 export default async function SiteHomePage({
   params,
 }: {
-  params: { domain: string };
+  params: { domain: string }
 }) {
-  const domain = decodeURIComponent(params.domain);
+  const domain = decodeURIComponent(params.domain)
   const [data, posts] = await Promise.all([
     getSiteData(domain),
     getPostsForSite(domain),
-  ]);
+  ])
 
   if (!data) {
-    notFound();
+    notFound()
   }
 
   return (
@@ -133,5 +133,5 @@ export default async function SiteHomePage({
         </div>
       )}
     </>
-  );
+  )
 }

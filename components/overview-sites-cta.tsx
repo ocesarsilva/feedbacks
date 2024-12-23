@@ -1,20 +1,20 @@
-import { getSession } from "@/lib/auth";
-import CreateSiteButton from "./create-site-button";
-import CreateSiteModal from "./modal/create-site";
-import Link from "next/link";
-import db from "@/lib/db";
-import { sites } from "@/lib/schema";
-import { count, eq } from "drizzle-orm";
+import { getSession } from "@/lib/auth"
+import db from "@/lib/db"
+import { sites } from "@/lib/schema"
+import { count, eq } from "drizzle-orm"
+import Link from "next/link"
+import CreateSiteButton from "./create-site-button"
+import CreateSiteModal from "./modal/create-site"
 
 export default async function OverviewSitesCTA() {
-  const session = await getSession();
+  const session = await getSession()
   if (!session) {
-    return 0;
+    return 0
   }
   const [sitesResult] = await db
     .select({ count: count() })
     .from(sites)
-    .where(eq(sites.userId, session.user.id));
+    .where(eq(sites.userId, session.user.id))
 
   return sitesResult.count > 0 ? (
     <Link
@@ -27,5 +27,5 @@ export default async function OverviewSitesCTA() {
     <CreateSiteButton>
       <CreateSiteModal />
     </CreateSiteButton>
-  );
+  )
 }

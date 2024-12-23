@@ -1,5 +1,5 @@
-import { InlineSnippet } from "@/components/form/domain-configuration";
-import Image from "next/image";
+import { InlineSnippet } from "@/components/form/domain-configuration"
+import Image from "next/image"
 
 export default function HomePage() {
   return (
@@ -18,5 +18,5 @@ export default function HomePage() {
         </InlineSnippet>
       </h1>
     </div>
-  );
+  )
 }
