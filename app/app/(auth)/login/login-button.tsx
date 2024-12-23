@@ -1,7 +1,7 @@
 "use client";
 
 import LoadingDots from "@/components/icons/loading-dots";
-import { signIn } from "next-auth/react";
+import { authClient } from "@/lib/auth-client";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -21,9 +21,12 @@ export default function LoginButton() {
   return (
     <button
       disabled={loading}
-      onClick={() => {
+      onClick={async () => {
         setLoading(true);
-        signIn("github");
+        await authClient.signIn.social({
+          provider: "github",
+          callbackURL: "/app",
+        });
       }}
       className={`${
         loading

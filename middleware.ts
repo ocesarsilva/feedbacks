@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
+import { betterFetch } from "@better-fetch/fetch";
+import { Session } from "better-auth/types";
 
 export const config = {
   matcher: [
@@ -40,7 +41,16 @@ export default async function middleware(req: NextRequest) {
 
   // rewrites for app pages
   if (hostname == `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
-    const session = await getToken({ req });
+    const { data: session } = await betterFetch<Session>(
+      "/api/auth/get-session",
+      {
+        baseURL: req.nextUrl.origin,
+        headers: {
+          //get the cookie from the request
+          cookie: req.headers.get("cookie") || "",
+        },
+      },
+    );
     if (!session && path !== "/login") {
       return NextResponse.redirect(new URL("/login", req.url));
     } else if (session && path == "/login") {

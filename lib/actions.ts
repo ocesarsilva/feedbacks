@@ -21,12 +21,15 @@ const nanoid = customAlphabet(
 ); // 7-character random string
 
 export const createSite = async (formData: FormData) => {
+  console.log("qweqw");
   const session = await getSession();
   if (!session?.user.id) {
     return {
       error: "Not authenticated",
     };
   }
+
+  console.log(session);
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
   const subdomain = formData.get("subdomain") as string;
@@ -45,6 +48,7 @@ export const createSite = async (formData: FormData) => {
     revalidateTag(
       `${subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}-metadata`,
     );
+
     return response;
   } catch (error: any) {
     if (error.code === "P2002") {

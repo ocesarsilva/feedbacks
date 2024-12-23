@@ -1,16 +1,19 @@
-import { getSession } from "@/lib/auth";
 import { notFound, redirect } from "next/navigation";
 import Form from "@/components/form";
 import { updatePostMetadata } from "@/lib/actions";
 import DeletePostForm from "@/components/form/delete-post-form";
 import db from "@/lib/db";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 export default async function PostSettings({
   params,
 }: {
   params: { id: string };
 }) {
-  const session = await getSession();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   if (!session) {
     redirect("/login");
   }

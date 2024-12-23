@@ -2,9 +2,14 @@ import { getSession } from "@/lib/auth";
 import { notFound, redirect } from "next/navigation";
 import Editor from "@/components/editor";
 import db from "@/lib/db";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 export default async function PostPage({ params }: { params: { id: string } }) {
-  const session = await getSession();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
   if (!session) {
     redirect("/login");
   }
