@@ -5,7 +5,6 @@ import { geistMono, geistSans } from "@/lib/fonts"
 import type { Metadata } from "next"
 
 import { Toaster } from "sonner"
-import { Providers } from "./providers"
 
 const title =
   "Platforms Starter Kit – The all-in-one starter kit for building multi-tenant applications."
@@ -47,10 +46,8 @@ export default function RootLayout({
           geistMono.variable
         )}
       >
-        <Providers>
-          {children}
-          <Toaster richColors />
-        </Providers>
+        {children}
+        <Toaster richColors />
       </body>
     </html>
   )

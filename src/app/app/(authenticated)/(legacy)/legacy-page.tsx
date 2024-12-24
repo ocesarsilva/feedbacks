@@ -1,4 +1,3 @@
-import OverviewSitesCTA from "@/components/overview-sites-cta"
 import PlaceholderCard from "@/components/placeholder-card"
 import Posts from "@/components/posts"
 import Sites from "@/components/sites"
@@ -18,9 +17,6 @@ export default function Overview() {
           <h1 className="font-cal text-3xl font-bold dark:text-white">
             Top Sites
           </h1>
-          <Suspense fallback={null}>
-            <OverviewSitesCTA />
-          </Suspense>
         </div>
         <Suspense
           fallback={

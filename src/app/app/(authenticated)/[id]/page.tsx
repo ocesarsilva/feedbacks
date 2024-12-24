@@ -1,6 +1,3 @@
-import { db } from "@/db"
-import { notFound } from "next/navigation"
-
 export default async function Page({
   params,
 }: {
@@ -8,13 +5,5 @@ export default async function Page({
 }) {
   const siteId = (await params).id
 
-  const site = await db.query.sites.findFirst({
-    where: (table, { eq }) => eq(table.id, siteId),
-  })
-
-  if (!site) {
-    notFound()
-  }
-
-  return <div>{site.name}</div>
+  return <div>{siteId}</div>
 }

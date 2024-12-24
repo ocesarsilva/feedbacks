@@ -1,4 +1,5 @@
 import { db } from "@/db"
+import type { Session } from "@/types"
 import { betterAuth } from "better-auth"
 
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
@@ -36,7 +37,7 @@ export async function getSession() {
     headers: await headers(),
   })
 
-  return session
+  return session as Session
 }
 
 export function withSiteAuth(action: any) {
