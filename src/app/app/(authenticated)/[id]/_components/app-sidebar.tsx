@@ -25,9 +25,9 @@ import { useSelectedLayoutSegments } from "next/navigation"
 import type { Site } from "@/db/schema"
 import { env } from "@/env"
 import { NavMain } from "./nav-main"
-import { NavMarketing } from "./nav-marketing"
 import { NavSecondary } from "./nav-secondary"
 import { NavUser } from "./nav-user"
+import { NavWorkspace } from "./nav-workspace"
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   session: Session
@@ -48,7 +48,7 @@ export function AppSidebar({ session, site, ...props }: AppSidebarProps) {
     navMain: [
       {
         title: "Início",
-        url: "#",
+        url: "/",
         icon: Home,
         isActive: segments.length === 0,
       },
@@ -104,7 +104,7 @@ export function AppSidebar({ session, site, ...props }: AppSidebarProps) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavMarketing items={data.navMarketing} />
+        <NavWorkspace items={data.navMarketing} />
 
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>

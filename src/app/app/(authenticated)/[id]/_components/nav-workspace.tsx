@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
-export function NavMarketing({
+export function NavWorkspace({
   items,
 }: {
   items: {
@@ -23,7 +23,7 @@ export function NavMarketing({
 }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Marketing</SidebarGroupLabel>
+      <SidebarGroupLabel>WORKSPACE</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (
