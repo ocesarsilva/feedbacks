@@ -1,11 +1,12 @@
+import { env } from "@/env"
 import { and, desc, eq } from "drizzle-orm"
 import { unstable_cache } from "next/cache"
 import db from "./db"
 import { posts, sites } from "./schema"
 
 export async function getSiteData(domain: string) {
-  const subdomain = domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
-    ? domain.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, "")
+  const subdomain = domain.endsWith(`.${env.NEXT_PUBLIC_ROOT_DOMAIN}`)
+    ? domain.replace(`.${env.NEXT_PUBLIC_ROOT_DOMAIN}`, "")
     : null
 
   return await unstable_cache(
@@ -28,8 +29,8 @@ export async function getSiteData(domain: string) {
 }
 
 export async function getPostsForSite(domain: string) {
-  const subdomain = domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
-    ? domain.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, "")
+  const subdomain = domain.endsWith(`.${env.NEXT_PUBLIC_ROOT_DOMAIN}`)
+    ? domain.replace(`.${env.NEXT_PUBLIC_ROOT_DOMAIN}`, "")
     : null
 
   return await unstable_cache(

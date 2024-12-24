@@ -1,6 +1,7 @@
 import { betterFetch } from "@better-fetch/fetch"
 import type { Session } from "better-auth/types"
 import { type NextRequest, NextResponse } from "next/server"
+import { env } from "./env"
 
 const authRoutes = ["/login", "/register", "/forgot-password"]
 
@@ -8,19 +9,9 @@ export default async function middleware(req: NextRequest) {
   const url = req.nextUrl
 
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
-  let hostname = req.headers
+  const hostname = req.headers
     .get("host")!
-    .replace(".localhost:3000", `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
-
-  // special case for Vercel preview deployment URLs
-  if (
-    hostname.includes("---") &&
-    hostname.endsWith(`.${process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_SUFFIX}`)
-  ) {
-    hostname = `${hostname.split("---")[0]}.${
-      process.env.NEXT_PUBLIC_ROOT_DOMAIN
-    }`
-  }
+    .replace(".localhost:3000", `.${env.NEXT_PUBLIC_ROOT_DOMAIN}`)
 
   const searchParams = req.nextUrl.searchParams.toString()
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
@@ -28,7 +19,7 @@ export default async function middleware(req: NextRequest) {
     searchParams.length > 0 ? `?${searchParams}` : ""
   }`
 
-  if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+  if (hostname === `app.${env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     const { data: session } = await betterFetch<Session>(
       "/api/auth/get-session",
       {
@@ -66,7 +57,7 @@ export default async function middleware(req: NextRequest) {
   // rewrite root application to `/home` folder
   if (
     hostname === "localhost:3000" ||
-    hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
+    hostname === env.NEXT_PUBLIC_ROOT_DOMAIN
   ) {
     return NextResponse.rewrite(
       new URL(`/home${path === "/" ? "" : path}`, req.url)

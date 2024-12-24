@@ -1,11 +1,12 @@
 import CTA from "@/components/cta"
 import ReportAbuse from "@/components/report-abuse"
+import { env } from "@/env"
 import { getSiteData } from "@/lib/fetchers"
 
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { notFound, redirect } from "next/navigation"
+import { notFound } from "next/navigation"
 import type { ReactNode } from "react"
 
 export async function generateMetadata(props: {
@@ -48,13 +49,6 @@ export async function generateMetadata(props: {
     },
     icons: [logo],
     metadataBase: new URL(`https://${domain}`),
-    // Optional: Set canonical URL to custom domain if it exists
-    // ...(params.domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) &&
-    //   data.customDomain && {
-    //     alternates: {
-    //       canonical: `https://${data.customDomain}`,
-    //     },
-    //   }),
   }
 }
 
@@ -71,15 +65,6 @@ export default async function SiteLayout(props: {
 
   if (!data) {
     notFound()
-  }
-
-  // Optional: Redirect to custom domain if it exists
-  if (
-    domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) &&
-    data.customDomain &&
-    process.env.REDIRECT_TO_CUSTOM_DOMAIN_IF_EXISTS === "true"
-  ) {
-    return redirect(`https://${data.customDomain}`)
   }
 
   return (
@@ -104,7 +89,7 @@ export default async function SiteLayout(props: {
 
       <div className="mt-20">{children}</div>
 
-      {domain === `demo.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` ||
+      {domain === `demo.${env.NEXT_PUBLIC_ROOT_DOMAIN}` ||
       domain === "platformize.co" ? (
         <CTA />
       ) : (

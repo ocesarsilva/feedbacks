@@ -1,5 +1,6 @@
 "use client"
 
+import { env } from "@/env"
 import { updatePost, updatePostMetadata } from "@/lib/actions"
 import type { SelectPost } from "@/lib/schema"
 import { cn } from "@/lib/utils"
@@ -19,7 +20,7 @@ export default function Editor({ post }: { post: PostWithSite }) {
   const [_hydrated, _setHydrated] = useState(false)
 
   const url = process.env.NEXT_PUBLIC_VERCEL_ENV
-    ? `https://${data.site?.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${data.slug}`
+    ? `https://${data.site?.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}/${data.slug}`
     : `http://${data.site?.subdomain}.localhost:3000/${data.slug}`
 
   useEffect(() => {

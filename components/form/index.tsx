@@ -3,6 +3,7 @@
 import LoadingDots from "@/components/icons/loading-dots"
 import { cn } from "@/lib/utils"
 
+import { env } from "@/env"
 import va from "@vercel/analytics"
 import { useParams, useRouter } from "next/navigation"
 import { useFormStatus } from "react-dom"
@@ -92,7 +93,7 @@ export default function Form({
               className="z-10 flex-1 rounded-l-md border border-stone-300 text-sm text-stone-900 placeholder-stone-300 focus:border-stone-500 focus:outline-none focus:ring-stone-500 dark:border-stone-600 dark:bg-black dark:text-white dark:placeholder-stone-700"
             />
             <div className="flex items-center rounded-r-md border border-l-0 border-stone-300 bg-stone-100 px-3 text-sm dark:border-stone-600 dark:bg-stone-800 dark:text-stone-400">
-              {process.env.NEXT_PUBLIC_ROOT_DOMAIN}
+              {env.NEXT_PUBLIC_ROOT_DOMAIN}
             </div>
           </div>
         ) : inputAttrs.name === "customDomain" ? (

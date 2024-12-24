@@ -1,5 +1,6 @@
 import BlogCard from "@/components/blog-card"
 import BlurImage from "@/components/blur-image"
+import { env } from "@/env"
 import db from "@/lib/db"
 import { getPostsForSite, getSiteData } from "@/lib/fetchers"
 import { placeholderBlurhash, toDateString } from "@/lib/utils"
@@ -20,7 +21,7 @@ export async function generateStaticParams() {
   const allPaths = allSites
     .flatMap(({ subdomain, customDomain }) => [
       subdomain && {
-        domain: `${subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`,
+        domain: `${subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}`,
       },
       customDomain && {
         domain: customDomain,

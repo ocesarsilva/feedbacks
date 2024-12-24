@@ -1,5 +1,6 @@
 "use server"
 
+import { env } from "@/env"
 import { getSession } from "@/lib/auth"
 import {
   addDomainToVercel,
@@ -45,9 +46,7 @@ export const createSite = async (formData: FormData) => {
       })
       .returning()
 
-    revalidateTag(
-      `${subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}-metadata`
-    )
+    revalidateTag(`${subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-metadata`)
 
     return response
   } catch (error: any) {
@@ -170,12 +169,10 @@ export const updateSite = withSiteAuth(
 
       console.log(
         "Updated site data! Revalidating tags: ",
-        `${site.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}-metadata`,
+        `${site.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-metadata`,
         `${site.customDomain}-metadata`
       )
-      revalidateTag(
-        `${site.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}-metadata`
-      )
+      revalidateTag(`${site.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-metadata`)
       site.customDomain && revalidateTag(`${site.customDomain}-metadata`)
 
       return response
@@ -200,9 +197,7 @@ export const deleteSite = withSiteAuth(
         .where(eq(sites.id, site.id))
         .returning()
 
-      revalidateTag(
-        `${site.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}-metadata`
-      )
+      revalidateTag(`${site.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-metadata`)
       response.customDomain && revalidateTag(`${site.customDomain}-metadata`)
       return response
     } catch (error: any) {
@@ -241,9 +236,7 @@ export const createPost = withSiteAuth(
       })
       .returning()
 
-    revalidateTag(
-      `${site.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}-posts`
-    )
+    revalidateTag(`${site.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-posts`)
     site.customDomain && revalidateTag(`${site.customDomain}-posts`)
 
     return response
@@ -284,10 +277,10 @@ export const updatePost = async (data: SelectPost) => {
       .returning()
 
     revalidateTag(
-      `${post.site?.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}-posts`
+      `${post.site?.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-posts`
     )
     revalidateTag(
-      `${post.site?.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}-${post.slug}`
+      `${post.site?.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-${post.slug}`
     )
 
     // if the site has a custom domain, we need to revalidate those tags too
@@ -349,10 +342,10 @@ export const updatePostMetadata = withPostAuth(
       }
 
       revalidateTag(
-        `${post.site?.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}-posts`
+        `${post.site?.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-posts`
       )
       revalidateTag(
-        `${post.site?.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}-${post.slug}`
+        `${post.site?.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-${post.slug}`
       )
 
       // if the site has a custom domain, we need to revalidate those tags too

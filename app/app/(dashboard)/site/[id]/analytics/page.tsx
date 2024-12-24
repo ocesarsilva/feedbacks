@@ -1,3 +1,4 @@
+import { env } from "@/env"
 import { getSession } from "@/lib/auth"
 import db from "@/lib/db"
 import { notFound, redirect } from "next/navigation"
@@ -18,7 +19,7 @@ export default async function SiteAnalytics(props: {
     notFound()
   }
 
-  const url = `${data.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`
+  const url = `${data.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}`
 
   return (
     <>
