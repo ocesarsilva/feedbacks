@@ -7,20 +7,14 @@ import {
   removeDomainFromVercelProject,
   validDomainRegex,
 } from "@/lib/domains"
-import { getBlurDataURL } from "@/lib/utils"
-import { put } from "@vercel/blob"
+
 import { eq } from "drizzle-orm"
-import { customAlphabet } from "nanoid"
+
 import { revalidateTag } from "next/cache"
 import { withSiteAuth } from "./auth"
 
 import { db } from "@/db"
 import { type Site, sites, users } from "../db/schema"
-
-const nanoid = customAlphabet(
-  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-  7
-) // 7-character random string
 
 export const createSite = async (formData: FormData) => {
   const session = await getSession()
@@ -30,7 +24,6 @@ export const createSite = async (formData: FormData) => {
     }
   }
 
-  console.log(session)
   const name = formData.get("name") as string
   const description = formData.get("description") as string
   const subdomain = formData.get("subdomain") as string
@@ -137,25 +130,6 @@ export const updateSite = withSiteAuth(
               "Missing BLOB_READ_WRITE_TOKEN token. Note: Vercel Blob is currently in beta – please fill out this form for access: https://tally.so/r/nPDMNd",
           }
         }
-
-        const file = formData.get(key) as File
-        const filename = `${nanoid()}.${file.type.split("/")[1]}`
-
-        const { url } = await put(filename, file, {
-          access: "public",
-        })
-
-        const blurhash = key === "image" ? await getBlurDataURL(url) : null
-
-        response = await db
-          .update(sites)
-          .set({
-            [key]: url,
-            ...(blurhash && { imageBlurhash: blurhash }),
-          })
-          .where(eq(sites.id, site.id))
-          .returning()
-          .then((res) => res[0])
       } else {
         response = await db
           .update(sites)
