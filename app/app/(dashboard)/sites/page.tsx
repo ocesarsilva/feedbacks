@@ -4,7 +4,10 @@ import PlaceholderCard from "@/components/placeholder-card"
 import Sites from "@/components/sites"
 import { Suspense } from "react"
 
-export default function AllSites({ params }: { params: { id: string } }) {
+export default async function AllSites(props: {
+  params: Promise<{ id: string }>
+}) {
+  const params = await props.params
   return (
     <div className="flex max-w-screen-xl flex-col space-y-12 p-8">
       <div className="flex flex-col space-y-6">

@@ -2,7 +2,7 @@ import { getPostsForSite } from "@/lib/fetchers"
 import { headers } from "next/headers"
 
 export default async function Sitemap() {
-  const headersList = headers()
+  const headersList = await headers()
   const domain =
     (await headersList)
       .get("host")

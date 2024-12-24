@@ -3,11 +3,10 @@ import { getSession } from "@/lib/auth"
 import db from "@/lib/db"
 import { notFound, redirect } from "next/navigation"
 
-export default async function SiteAnalytics({
-  params,
-}: {
-  params: { id: string }
+export default async function SiteAnalytics(props: {
+  params: Promise<{ id: string }>
 }) {
+  const params = await props.params
   const session = await getSession()
   if (!session) {
     redirect("/login")

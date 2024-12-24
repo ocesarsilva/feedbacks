@@ -4,7 +4,10 @@ import db from "@/lib/db"
 import { headers } from "next/headers"
 import { notFound, redirect } from "next/navigation"
 
-export default async function PostPage({ params }: { params: { id: string } }) {
+export default async function PostPage(props: {
+  params: Promise<{ id: string }>
+}) {
+  const params = await props.params
   const session = await auth.api.getSession({
     headers: await headers(),
   })
