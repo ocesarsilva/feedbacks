@@ -12,16 +12,10 @@ import { put } from "@vercel/blob"
 import { eq } from "drizzle-orm"
 import { customAlphabet } from "nanoid"
 import { revalidateTag } from "next/cache"
-import { withPostAuth, withSiteAuth } from "./auth"
+import { withSiteAuth } from "./auth"
 
 import { db } from "@/db"
-import {
-  type SelectPost,
-  type SelectSite,
-  posts,
-  sites,
-  users,
-} from "../db/schema"
+import { type Site, sites, users } from "../db/schema"
 
 const nanoid = customAlphabet(
   "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
@@ -68,7 +62,7 @@ export const createSite = async (formData: FormData) => {
 }
 
 export const updateSite = withSiteAuth(
-  async (formData: FormData, site: SelectSite, key: string) => {
+  async (formData: FormData, site: Site, key: string) => {
     const value = formData.get(key) as string
 
     try {
@@ -195,205 +189,22 @@ export const updateSite = withSiteAuth(
   }
 )
 
-export const deleteSite = withSiteAuth(
-  async (_: FormData, site: SelectSite) => {
-    try {
-      const [response] = await db
-        .delete(sites)
-        .where(eq(sites.id, site.id))
-        .returning()
-
-      revalidateTag(`${site.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-metadata`)
-      response.customDomain && revalidateTag(`${site.customDomain}-metadata`)
-      return response
-    } catch (error: any) {
-      return {
-        error: error.message,
-      }
-    }
-  }
-)
-
-export const getSiteFromPostId = async (postId: string) => {
-  const post = await db.query.posts.findFirst({
-    where: eq(posts.id, postId),
-    columns: {
-      siteId: true,
-    },
-  })
-
-  return post?.siteId
-}
-
-export const createPost = withSiteAuth(
-  async (_: FormData, site: SelectSite) => {
-    const session = await getSession()
-    if (!session?.user.id) {
-      return {
-        error: "Not authenticated",
-      }
-    }
-
-    const [response] = await db
-      .insert(posts)
-      .values({
-        siteId: site.id,
-        userId: session.user.id,
-      })
-      .returning()
-
-    revalidateTag(`${site.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-posts`)
-    site.customDomain && revalidateTag(`${site.customDomain}-posts`)
-
-    return response
-  }
-)
-
-// creating a separate function for this because we're not using FormData
-export const updatePost = async (data: SelectPost) => {
-  const session = await getSession()
-  if (!session?.user.id) {
-    return {
-      error: "Not authenticated",
-    }
-  }
-
-  const post = await db.query.posts.findFirst({
-    where: eq(posts.id, data.id),
-    with: {
-      site: true,
-    },
-  })
-
-  if (!post || post.userId !== session.user.id) {
-    return {
-      error: "Post not found",
-    }
-  }
-
+export const deleteSite = withSiteAuth(async (_: FormData, site: Site) => {
   try {
     const [response] = await db
-      .update(posts)
-      .set({
-        title: data.title,
-        description: data.description,
-        content: data.content,
-      })
-      .where(eq(posts.id, data.id))
+      .delete(sites)
+      .where(eq(sites.id, site.id))
       .returning()
 
-    revalidateTag(
-      `${post.site?.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-posts`
-    )
-    revalidateTag(
-      `${post.site?.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-${post.slug}`
-    )
-
-    // if the site has a custom domain, we need to revalidate those tags too
-    post.site?.customDomain &&
-      (revalidateTag(
-        `${post.site?.customDomain}-posts`
-        // biome-ignore lint/style/noCommaOperator: <explanation>
-      ),
-      revalidateTag(`${post.site?.customDomain}-${post.slug}`))
-
+    revalidateTag(`${site.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-metadata`)
+    response.customDomain && revalidateTag(`${site.customDomain}-metadata`)
     return response
   } catch (error: any) {
     return {
       error: error.message,
     }
   }
-}
-
-export const updatePostMetadata = withPostAuth(
-  async (
-    formData: FormData,
-    post: SelectPost & {
-      site: SelectSite
-    },
-    key: string
-  ) => {
-    const value = formData.get(key) as string
-
-    try {
-      // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
-      let response
-      if (key === "image") {
-        const file = formData.get("image") as File
-        const filename = `${nanoid()}.${file.type.split("/")[1]}`
-
-        const { url } = await put(filename, file, {
-          access: "public",
-        })
-
-        const blurhash = await getBlurDataURL(url)
-        response = await db
-          .update(posts)
-          .set({
-            image: url,
-            imageBlurhash: blurhash,
-          })
-          .where(eq(posts.id, post.id))
-          .returning()
-          .then((res) => res[0])
-      } else {
-        response = await db
-          .update(posts)
-          .set({
-            [key]: key === "published" ? value === "true" : value,
-          })
-          .where(eq(posts.id, post.id))
-          .returning()
-          .then((res) => res[0])
-      }
-
-      revalidateTag(
-        `${post.site?.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-posts`
-      )
-      revalidateTag(
-        `${post.site?.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}-${post.slug}`
-      )
-
-      // if the site has a custom domain, we need to revalidate those tags too
-      post.site?.customDomain &&
-        (revalidateTag(
-          `${post.site?.customDomain}-posts`
-          // biome-ignore lint/style/noCommaOperator: <explanation>
-        ),
-        revalidateTag(`${post.site?.customDomain}-${post.slug}`))
-
-      return response
-    } catch (error: any) {
-      if (error.code === "P2002") {
-        return {
-          error: "This slug is already in use",
-        }
-      }
-      return {
-        error: error.message,
-      }
-    }
-  }
-)
-
-export const deletePost = withPostAuth(
-  async (_: FormData, post: SelectPost) => {
-    try {
-      const [response] = await db
-        .delete(posts)
-        .where(eq(posts.id, post.id))
-        .returning({
-          siteId: posts.siteId,
-        })
-
-      return response
-    } catch (error: any) {
-      return {
-        error: error.message,
-      }
-    }
-  }
-)
+})
 
 export const editUser = async (
   formData: FormData,

@@ -22,7 +22,8 @@ import {
 import type { Session } from "@/types"
 import { useSelectedLayoutSegments } from "next/navigation"
 
-import type { SelectSite } from "@/db/schema"
+import type { Site } from "@/db/schema"
+import { env } from "@/env"
 import { NavMain } from "./nav-main"
 import { NavMarketing } from "./nav-marketing"
 import { NavSecondary } from "./nav-secondary"
@@ -30,7 +31,7 @@ import { NavUser } from "./nav-user"
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   session: Session
-  site: SelectSite
+  site: Site
 }
 
 export function AppSidebar({ session, site, ...props }: AppSidebarProps) {
@@ -55,13 +56,13 @@ export function AppSidebar({ session, site, ...props }: AppSidebarProps) {
     navMarketing: [
       {
         title: "Marca",
-        url: "/branding",
+        url: `/${site.id}/branding`,
         icon: Paintbrush2,
         isActive: segments.includes("branding"),
       },
       {
         title: "Configurações",
-        url: "/settings",
+        url: `/${site.id}/settings`,
         icon: Settings,
         isActive: segments.includes("settings"),
       },
@@ -86,7 +87,9 @@ export function AppSidebar({ session, site, ...props }: AppSidebarProps) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="/#">
+              <a
+                href={`http://${site.subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}`}
+              >
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Command className="size-4" />
                 </div>

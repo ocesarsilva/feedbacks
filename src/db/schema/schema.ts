@@ -1,13 +1,6 @@
 import { createId } from "@paralleldrive/cuid2"
 import { relations } from "drizzle-orm"
-import {
-  boolean,
-  index,
-  pgTable,
-  text,
-  timestamp,
-  uniqueIndex,
-} from "drizzle-orm/pg-core"
+import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core"
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
@@ -98,54 +91,7 @@ export const sites = pgTable(
   }
 )
 
-export const posts = pgTable(
-  "posts",
-  {
-    id: text("id")
-      .primaryKey()
-      .$defaultFn(() => createId()),
-    title: text("title"),
-    description: text("description"),
-    content: text("content"),
-    slug: text("slug")
-      .notNull()
-      .$defaultFn(() => createId()),
-    image: text("image").default(
-      "https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE3/hxfcV5V-eInX3jbVUhjAt1suB7zB88uGd1j20b.png"
-    ),
-    imageBlurhash: text("imageBlurhash").default(
-      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAhCAYAAACbffiEAAAACXBIWXMAABYlAAAWJQFJUiTwAAABfUlEQVR4nN3XyZLDIAwE0Pz/v3q3r55JDlSBplsIEI49h76k4opexCK/juP4eXjOT149f2Tf9ySPgcjCc7kdpBTgDPKByKK2bTPFEdMO0RDrusJ0wLRBGCIuelmWJAjkgPGDSIQEMBDCfA2CEPM80+Qwl0JkNxBimiaYGOTUlXYI60YoehzHJDEm7kxjV3whOQTD3AaCuhGKHoYhyb+CBMwjIAFz647kTqyapdV4enGINuDJMSScPmijSwjCaHeLcT77C7EC0C1ugaCTi2HYfAZANgj6Z9A8xY5eiYghDMNQBJNCWhASot0jGsSCUiHWZcSGQjaWWCDaGMOWnsCcn2QhVkRuxqqNxMSdUSElCDbp1hbNOsa6Ugxh7xXauF4DyM1m5BLtCylBXgaxvPXVwEoOBjeIFVODtW74oj1yBQah3E8tyz3SkpolKS9Geo9YMD1QJR1Go4oJkgO1pgbNZq0AOUPChyjvh7vlXaQa+X1UXwKxgHokB2XPxbX+AnijwIU4ahazAAAAAElFTkSuQmCC"
-    ),
-    createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt", { mode: "date" })
-      .notNull()
-      .$onUpdate(() => new Date()),
-    published: boolean("published").default(false).notNull(),
-    siteId: text("siteId").references(() => sites.id, {
-      onDelete: "cascade",
-      onUpdate: "cascade",
-    }),
-    userId: text("userId").references(() => users.id, {
-      onDelete: "cascade",
-      onUpdate: "cascade",
-    }),
-  },
-  (table) => {
-    return {
-      siteIdIdx: index().on(table.siteId),
-      userIdIdx: index().on(table.userId),
-      slugSiteIdKey: uniqueIndex().on(table.slug, table.siteId),
-    }
-  }
-)
-
-export const postsRelations = relations(posts, ({ one }) => ({
-  site: one(sites, { references: [sites.id], fields: [posts.siteId] }),
-  user: one(users, { references: [users.id], fields: [posts.userId] }),
-}))
-
-export const sitesRelations = relations(sites, ({ one, many }) => ({
-  posts: many(posts),
+export const sitesRelations = relations(sites, ({ one }) => ({
   user: one(users, { references: [users.id], fields: [sites.userId] }),
 }))
 
@@ -161,8 +107,6 @@ export const userRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   sessions: many(sessions),
   sites: many(sites),
-  posts: many(posts),
 }))
 
-export type SelectSite = typeof sites.$inferSelect
-export type SelectPost = typeof posts.$inferSelect
+export type Site = typeof sites.$inferSelect
