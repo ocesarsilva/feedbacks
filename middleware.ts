@@ -2,18 +2,7 @@ import { betterFetch } from "@better-fetch/fetch"
 import type { Session } from "better-auth/types"
 import { type NextRequest, NextResponse } from "next/server"
 
-export const config = {
-  matcher: [
-    /*
-     * Match all paths except for:
-     * 1. /api routes
-     * 2. /_next (Next.js internals)
-     * 3. /_static (inside /public)
-     * 4. all root files inside /public (e.g. /favicon.ico)
-     */
-    "/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)",
-  ],
-}
+const authRoutes = ["/login", "/register", "/forgot-password"]
 
 export default async function middleware(req: NextRequest) {
   const url = req.nextUrl
@@ -39,24 +28,29 @@ export default async function middleware(req: NextRequest) {
     searchParams.length > 0 ? `?${searchParams}` : ""
   }`
 
-  // rewrites for app pages
   if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     const { data: session } = await betterFetch<Session>(
       "/api/auth/get-session",
       {
         baseURL: req.nextUrl.origin,
         headers: {
-          //get the cookie from the request
+          // Pega o cookie do request
           cookie: req.headers.get("cookie") || "",
         },
       }
     )
-    if (!session && path !== "/login") {
+
+    // Redireciona para /login caso não haja sessão e o path não esteja nos loginPaths
+    if (!session && !authRoutes.includes(path)) {
       return NextResponse.redirect(new URL("/login", req.url))
     }
-    if (session && path === "/login") {
+
+    // Redireciona para a home se já estiver autenticado e o path estiver nos loginPaths
+    if (session && authRoutes.includes(path)) {
       return NextResponse.redirect(new URL("/", req.url))
     }
+
+    // Faz o rewrite para as páginas do app
     return NextResponse.rewrite(
       new URL(`/app${path === "/" ? "" : path}`, req.url)
     )
@@ -81,4 +75,17 @@ export default async function middleware(req: NextRequest) {
 
   // rewrite everything else to `/[domain]/[slug] dynamic route
   return NextResponse.rewrite(new URL(`/${hostname}${path}`, req.url))
+}
+
+export const config = {
+  matcher: [
+    /*
+     * Match all paths except for:
+     * 1. /api routes
+     * 2. /_next (Next.js internals)
+     * 3. /_static (inside /public)
+     * 4. all root files inside /public (e.g. /favicon.ico)
+     */
+    "/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)",
+  ],
 }

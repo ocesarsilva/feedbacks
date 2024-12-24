@@ -9,7 +9,7 @@ export default async function Layout({ children }: React.PropsWithChildren) {
   })
 
   if (session?.user) {
-    throw redirect("/dashboard")
+    throw redirect("/")
   }
 
   return (

@@ -1,4 +1,3 @@
-import AnalyticsMockup from "@/components/analytics"
 import { getSession } from "@/lib/auth"
 import db from "@/lib/db"
 import { notFound, redirect } from "next/navigation"
@@ -38,7 +37,6 @@ export default async function SiteAnalytics(props: {
           </a>
         </div>
       </div>
-      <AnalyticsMockup />
     </>
   )
 }

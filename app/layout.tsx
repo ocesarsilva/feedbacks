@@ -1,11 +1,12 @@
 import "./globals.css"
 import { cn } from "@/lib/utils"
 
-import { geistMono, geistSans } from "@/styles/fonts"
+import { geistMono, geistSans } from "@/lib/fonts"
 import { Analytics } from "@vercel/analytics/react"
 import type { Metadata } from "next"
 
 import { Toaster } from "sonner"
+import { Providers } from "./providers"
 
 const title =
   "Platforms Starter Kit – The all-in-one starter kit for building multi-tenant applications."
@@ -47,9 +48,11 @@ export default function RootLayout({
           geistMono.variable
         )}
       >
-        {children}
-        <Toaster richColors />
-        <Analytics />
+        <Providers>
+          {children}
+          <Toaster richColors />
+          <Analytics />
+        </Providers>
       </body>
     </html>
   )

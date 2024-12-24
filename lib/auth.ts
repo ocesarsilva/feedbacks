@@ -16,6 +16,17 @@ export const auth = betterAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     },
   },
+  emailAndPassword: {
+    enabled: true,
+    sendResetPassword: async ({ user, url }) => {
+      console.log(
+        "Sending reset password email to",
+        user.email,
+        "with url",
+        url
+      )
+    },
+  },
   plugins: [nextCookies()],
   trustedOrigins: ["http://app.localhost:3000"],
 })
