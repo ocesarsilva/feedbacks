@@ -1,40 +1,48 @@
-import Image from "next/image"
-import { Suspense } from "react"
-import LoginButton from "./login-button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { OAuthSignIn } from "../_components/oauth-signin"
+
+// import { LoginForm } from "@/app/(unauthenticated)/_components/login-form"
 
 export default function LoginPage() {
   return (
-    <div className="mx-5 border border-stone-200 py-10 sm:mx-auto sm:w-full sm:max-w-md sm:rounded-lg sm:shadow-md dark:border-stone-700">
-      <Image
-        alt="Platforms Starter Kit"
-        width={100}
-        height={100}
-        className="relative mx-auto h-12 w-auto dark:scale-110 dark:rounded-full dark:border dark:border-stone-400"
-        src="/logo.png"
-      />
-      <h1 className="mt-6 text-center font-cal text-3xl dark:text-white">
-        Platforms Starter Kit
-      </h1>
-      <p className="mt-2 text-center text-sm text-stone-600 dark:text-stone-400">
-        Build multi-tenant applications with custom domains. <br />
-        <a
-          className="font-medium text-black hover:text-stone-800 dark:text-stone-300 dark:hover:text-stone-100"
-          href="https://vercel.com/blog/platforms-starter-kit"
-          rel="noreferrer"
-          target="_blank"
-        >
-          Read the announcement.
-        </a>
-      </p>
-
-      <div className="mx-auto mt-4 w-11/12 max-w-xs sm:w-full">
-        <Suspense
-          fallback={
-            <div className="my-2 h-10 w-full rounded-md border border-stone-200 bg-stone-100 dark:border-stone-700 dark:bg-stone-800" />
-          }
-        >
-          <LoginButton />
-        </Suspense>
+    <div className="flex flex-col gap-6">
+      <Card>
+        <CardHeader className="text-center">
+          <CardTitle className="text-xl">Bem-vindo de volta</CardTitle>
+          <CardDescription>
+            Faça login com sua conta Google ou GitHub
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div>
+            <div className="grid gap-6">
+              <OAuthSignIn />
+              {/* <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+                <span className="relative z-10 bg-background px-2 text-muted-foreground">
+                  Ou continue com
+                </span>
+              </div> */}
+              {/* <LoginForm /> */}
+              <div className="text-center text-sm">
+                Não tem uma conta?{" "}
+                <a href="/register" className="underline underline-offset-4">
+                  Cadastre-se
+                </a>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
+        Ao clicar em continuar, você concorda com nossos{" "}
+        <a href="/#">Termos de Serviço</a> e{" "}
+        <a href="/#">Política de Privacidade</a>.
       </div>
     </div>
   )
