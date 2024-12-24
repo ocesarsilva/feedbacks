@@ -4,7 +4,6 @@ import LoadingDots from "@/components/icons/loading-dots"
 import { env } from "@/env"
 import { createSite } from "@/lib/actions"
 import { cn } from "@/lib/utils"
-import va from "@vercel/analytics"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useFormStatus } from "react-dom"
@@ -38,7 +37,6 @@ export default function CreateSiteModal() {
           if (res.error) {
             toast.error(res.error)
           } else {
-            va.track("Created Site")
             const { id } = res
             router.refresh()
             router.push(`/site/${id}`)

@@ -1,7 +1,6 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import va from "@vercel/analytics"
 import { AlertTriangle } from "lucide-react"
 import { useParams } from "next/navigation"
 import { useState } from "react"
@@ -25,14 +24,11 @@ export default function ReportAbuse() {
       </button>
       {open && (
         <form
-          action={async (formData) => {
-            const url = formData.get("url") as string
-            va.track("Reported Abuse", { url })
-            // artificial 1s delay
+          action={async (_) => {
             await new Promise((resolve) => setTimeout(resolve, 1000))
             setOpen(false)
             toast.success(
-              "Successfully reported abuse – thank you for helping us keep the internet safe!"
+              "Successfully reported abuse - thank you for helping us keep the internet safe!"
             )
           }}
           className="absolute bottom-20 right-2 flex w-96 flex-col space-y-6 rounded-lg border border-stone-200 bg-white p-8 shadow-lg animate-in slide-in-from-bottom-5"

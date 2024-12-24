@@ -1,8 +1,7 @@
-import "./globals.css"
+import "@/styles/globals.css"
 import { cn } from "@/lib/utils"
 
 import { geistMono, geistSans } from "@/lib/fonts"
-import { Analytics } from "@vercel/analytics/react"
 import type { Metadata } from "next"
 
 import { Toaster } from "sonner"
@@ -51,7 +50,6 @@ export default function RootLayout({
         <Providers>
           {children}
           <Toaster richColors />
-          <Analytics />
         </Providers>
       </body>
     </html>

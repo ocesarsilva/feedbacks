@@ -3,7 +3,6 @@
 import LoadingDots from "@/components/icons/loading-dots"
 import { deleteSite } from "@/lib/actions"
 import { cn } from "@/lib/utils"
-import va from "@vercel/analytics"
 import { useParams, useRouter } from "next/navigation"
 import { useFormStatus } from "react-dom"
 import { toast } from "sonner"
@@ -21,7 +20,6 @@ export default function DeleteSiteForm({ siteName }: { siteName: string }) {
             if (res.error) {
               toast.error(res.error)
             } else {
-              va.track("Deleted Site")
               router.refresh()
               router.push("/sites")
               toast.success("Successfully deleted site!")

@@ -3,7 +3,6 @@
 import LoadingDots from "@/components/icons/loading-dots"
 import { createPost } from "@/lib/actions"
 import { cn } from "@/lib/utils"
-import va from "@vercel/analytics"
 import { useParams, useRouter } from "next/navigation"
 import { useTransition } from "react"
 
@@ -18,7 +17,6 @@ export default function CreatePostButton() {
       onClick={() =>
         startTransition(async () => {
           const post = await createPost(null, id, null)
-          va.track("Created Post")
           router.refresh()
           router.push(`/post/${post.id}`)
         })

@@ -4,7 +4,6 @@ import LoadingDots from "@/components/icons/loading-dots"
 import { cn } from "@/lib/utils"
 
 import { env } from "@/env"
-import va from "@vercel/analytics"
 import { useParams, useRouter } from "next/navigation"
 import { useFormStatus } from "react-dom"
 import { toast } from "sonner"
@@ -50,7 +49,6 @@ export default function Form({
           if (res.error) {
             toast.error(res.error)
           } else {
-            va.track(`Updated ${inputAttrs.name}`, id ? { id } : {})
             if (id) {
               router.refresh()
             } else {

@@ -3,7 +3,6 @@
 import LoadingDots from "@/components/icons/loading-dots"
 import { deletePost } from "@/lib/actions"
 import { cn } from "@/lib/utils"
-import va from "@vercel/analytics"
 import { useParams, useRouter } from "next/navigation"
 import { useFormStatus } from "react-dom"
 import { toast } from "sonner"
@@ -20,7 +19,6 @@ export default function DeletePostForm({ postName }: { postName: string }) {
           if (res.error) {
             toast.error(res.error)
           } else {
-            va.track("Deleted Post")
             router.refresh()
             router.push(`/site/${res.siteId}`)
             toast.success("Successfully deleted post!")
