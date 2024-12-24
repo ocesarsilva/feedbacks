@@ -31,7 +31,7 @@ export default async function SettingsLayout({
   ]
 
   return (
-    <div className=" space-y-6 p-10 pt-7 pb-16 max-w-3xl mx-auto w-full">
+    <div className="space-y-6 p-10 pt-7 pb-16 mx-auto w-full">
       <div className="space-y-0.5">
         <h2 className="text-2xl font-bold tracking-tight">Branding</h2>
         <p className="text-muted-foreground">

@@ -1,15 +1,20 @@
 "use server"
 
-import { unstable_noStore as noStore, revalidateTag } from "next/cache"
+import {
+  unstable_noStore as noStore,
+  revalidatePath,
+  revalidateTag,
+} from "next/cache"
 
 import { db } from "@/db"
 import { sites } from "@/db/schema"
 import { env } from "@/env"
 import { getSession } from "../auth"
 
+import { eq } from "drizzle-orm"
 import type { z } from "zod"
 import { getErrorMessage } from "../handle-error"
-import type { createSiteSchema } from "../validations/site"
+import type { createSiteSchema, updateSiteSchema } from "../validations/site"
 
 export async function createSite(inputs: z.infer<typeof createSiteSchema>) {
   noStore()
@@ -56,6 +61,37 @@ export async function createSite(inputs: z.infer<typeof createSiteSchema>) {
     return {
       data: null,
       error: getErrorMessage(error),
+    }
+  }
+}
+
+export async function updateSite(
+  inputs: z.infer<typeof updateSiteSchema> & {
+    siteId: string
+  }
+) {
+  noStore()
+  try {
+    const { name, description, siteId } = inputs
+
+    await db
+      .update(sites)
+      .set({
+        name: name,
+        description: description,
+      })
+      .where(eq(sites.id, siteId))
+
+    revalidatePath(`/${siteId}/settings`)
+
+    return {
+      data: null,
+      error: null,
+    }
+  } catch (err) {
+    return {
+      data: null,
+      error: getErrorMessage(err),
     }
   }
 }

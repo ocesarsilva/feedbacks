@@ -19,3 +19,8 @@ export const createSiteSchema = z
     }
     return true
   })
+
+export const updateSiteSchema = z.object({
+  name: z.string().min(3).max(50),
+  description: z.string().optional(),
+})
