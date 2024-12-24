@@ -46,6 +46,6 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["node_modules", ".next", "mdx.module.css"]
+    "ignore": ["node_modules", ".next"]
   }
 }

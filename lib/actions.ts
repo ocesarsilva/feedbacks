@@ -67,6 +67,7 @@ export const updateSite = withSiteAuth(
     const value = formData.get(key) as string
 
     try {
+      // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
       let response
 
       if (key === "customDomain") {
@@ -316,6 +317,7 @@ export const updatePostMetadata = withPostAuth(
     const value = formData.get(key) as string
 
     try {
+      // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
       let response
       if (key === "image") {
         const file = formData.get("image") as File

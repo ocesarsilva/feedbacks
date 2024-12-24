@@ -17,7 +17,7 @@ export const auth = betterAuth({
     },
   },
   plugins: [nextCookies()],
-  trustedOrigins: ["http://app.localhost:3000/login"],
+  trustedOrigins: ["http://app.localhost:3000"],
 })
 
 export async function getSession() {

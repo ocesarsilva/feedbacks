@@ -121,6 +121,7 @@ export const getSubdomain = (name: string, apexName: string) => {
 }
 
 export const getApexDomain = (url: string) => {
+  // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
   let domain
   try {
     domain = new URL(url).hostname

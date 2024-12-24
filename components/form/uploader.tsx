@@ -133,7 +133,7 @@ export default function Uploader({
           className="sr-only"
           onChange={(e) => {
             const file = e.currentTarget.files?.[0]
-            handleUpload(file)
+            handleUpload(file!)
           }}
         />
       </div>
