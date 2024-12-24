@@ -29,7 +29,6 @@ const nanoid = customAlphabet(
 ) // 7-character random string
 
 export const createSite = async (formData: FormData) => {
-  console.log("qweqw")
   const session = await getSession()
   if (!session?.user.id) {
     return {
