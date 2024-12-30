@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 import { geistMono, geistSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
@@ -25,7 +26,7 @@ export default function RootLayout({
           geistMono.variable,
         )}
       >
-        {children}
+        <NuqsAdapter>{children}</NuqsAdapter>
       </body>
     </html>
   )
