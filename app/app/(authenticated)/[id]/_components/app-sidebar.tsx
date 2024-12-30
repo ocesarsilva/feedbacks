@@ -2,7 +2,7 @@
 
 import type { Session } from "@/types"
 import { LifeBuoy, Paintbrush2, Send, Settings } from "lucide-react"
-import { useSelectedLayoutSegments } from "next/navigation"
+import { useRouter, useSelectedLayoutSegments } from "next/navigation"
 import { useQueryState } from "nuqs"
 import type * as React from "react"
 
@@ -39,46 +39,66 @@ export function AppSidebar({
   workspaces,
   ...props
 }: AppSidebarProps) {
+  const router = useRouter()
   const segments = useSelectedLayoutSegments()
-  const [request, setRequest] = useQueryState("requests")
+  const [status, setStatus] = useQueryState("status", {
+    defaultValue: "all",
+  })
+
+  function mainNavAction(requestStatus: string) {
+    if (segments.length === 0) {
+      setStatus(requestStatus)
+    } else {
+      router.push(`/${currentWorkspace.id}/requests?status=${requestStatus}`)
+    }
+  }
+
+  const requestStatus = {
+    pending: "pending",
+    reviewing: "reviewing",
+    planned: "planned",
+    progress: "progress",
+    completed: "completed",
+    closed: "closed",
+  }
 
   const data = {
     navMain: [
       {
         title: "Pendentes",
-        action: () => setRequest("pending"),
+        action: () => mainNavAction(requestStatus.pending),
         icon: "pending",
-        isActive: request === "pending",
+        isActive: status === requestStatus.pending,
       },
       {
         title: "Revisando",
-        action: () => setRequest("reviewing"),
+        action: () => mainNavAction(requestStatus.reviewing),
         icon: "reviewing",
-        isActive: request === "reviewing",
+        isActive: status === requestStatus.reviewing,
       },
       {
         title: "Planejado",
-        action: () => setRequest("planned"),
+        action: () => mainNavAction(requestStatus.planned),
         icon: "planned",
-        isActive: request === "planned",
+        isActive: status === requestStatus.planned,
       },
       {
         title: "Em andamento",
-        action: () => setRequest("progress"),
+        action: () => mainNavAction(requestStatus.progress),
         icon: "progress",
-        isActive: request === "progress",
+        isActive: status === requestStatus.progress,
       },
       {
         title: "Completo",
-        action: () => setRequest("completed"),
+        action: () => mainNavAction(requestStatus.completed),
         icon: "completed",
-        isActive: request === "completed",
+        isActive: status === requestStatus.completed,
       },
       {
         title: "Fechado",
-        action: () => setRequest("closed"),
+        action: () => mainNavAction(requestStatus.closed),
         icon: "closed",
-        isActive: request === "closed",
+        isActive: status === requestStatus.closed,
       },
     ] satisfies NavItemMain[],
     navWorkspace: [
@@ -110,7 +130,7 @@ export function AppSidebar({
   }
 
   return (
-    <Sidebar collapsible="none" className="min-h-svh" {...props}>
+    <Sidebar collapsible="none" className="min-h-svh border-r" {...props}>
       <SidebarHeader>
         <WorkspaceSwitcher
           workspaces={workspaces}

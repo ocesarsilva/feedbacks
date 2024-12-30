@@ -42,7 +42,7 @@ export default async function Layout({
         currentWorkspace={currentWorkspace}
         workspaces={workspaces}
       />
-      <SidebarInset>{children}</SidebarInset>
+      <SidebarInset className="bg-sidebar">{children}</SidebarInset>
     </SidebarProvider>
   )
 }

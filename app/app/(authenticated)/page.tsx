@@ -20,5 +20,5 @@ export default async function Redirects() {
     throw redirect(redirects.toOnboarding)
   }
 
-  return redirect(`/${sites[0]!.id}`)
+  return redirect(`/${sites[0]!.id}/requests?status=all`)
 }
