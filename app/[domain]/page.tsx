@@ -2,12 +2,15 @@ import { notFound } from "next/navigation"
 
 import { db } from "@/db"
 import { env } from "@/env"
+import { getSession } from "@/lib/auth"
 
 export default async function Page({
   params,
 }: {
   params: Promise<{ domain: string }>
 }) {
+  const session = await getSession()
+  console.log(session)
   const domain = decodeURIComponent((await params).domain)
 
   const subdomain = domain.endsWith(`.${env.NEXT_PUBLIC_ROOT_DOMAIN}`)
