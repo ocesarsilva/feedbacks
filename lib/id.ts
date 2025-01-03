@@ -2,6 +2,7 @@ import { customAlphabet } from "nanoid"
 
 const prefixes = {
   workspace: "wkp",
+  request: "req",
 }
 
 interface GenerateIdOptions {
